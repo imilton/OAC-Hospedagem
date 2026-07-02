@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block title %}Disponibilizar Hospedagem{% endblock %}
+{% block body_class %}page-form{% endblock %}
+
+{% block layout %}
+<div class="form-page">
+  <header class="form-header">
+    <a href="{{ url_for('public.index') }}" class="back-link"><i class="fas fa-arrow-left"></i> Voltar</a>
+    <div class="logo-badge sm">
+      <span class="logo-the">The</span>
+      <span class="logo-oac">OAC</span>
+    </div>
+    <h1><i class="fas fa-home"></i> Disponibilizar Hospedagem</h1>
+    <p>Preencha os dados para disponibilizar a sua casa durante o evento.</p>
+  </header>
+
+  <form method="POST" enctype="multipart/form-data" class="oac-form" id="formAnfitriao">
+
+    <!-- DADOS PESSOAIS -->
+    <fieldset>
+      <legend><i class="fas fa-user"></i> Dados Pessoais</legend>
+      <div class="grid-2">
+        <div class="field">
+          <label for="nome">Nome completo *</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="field">
+          <label for="fotografia">Fotografia <small>(opcional)</small></label>
+          <input type="file" id="fotografia" name="fotografia" accept="image/*">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="field">
+          <label for="sexo">Sexo *</label>
+          <select id="sexo" name="sexo" required>
+            <option value="">Seleccione</option>
+            <option>Masculino</option>
+            <option>Feminino</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="telefone">Telefone *</label>
+          <input type="tel" id="telefone" name="telefone" required>
+        </div>
+        <div class="field">
+          <label for="whatsapp">WhatsApp</label>
+          <input type="tel" id="whatsapp" name="whatsapp">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label for="comunidade">Comunidade *</label>
+          <input type="text" id="comunidade" name="comunidade" required>
+        </div>
+        <div class="field">
+          <label for="bairro">Bairro *</label>
+          <input type="text" id="bairro" name="bairro" required>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label for="rua">Rua</label>
+          <input type="text" id="rua" name="rua">
+        </div>
+        <div class="field">
+          <label for="ponto_referencia">Ponto de referência</label>
+          <input type="text" id="ponto_referencia" name="ponto_referencia">
+        </div>
+      </div>
+      <div class="field">
+        <label for="gps">Localização GPS <small>(opcional)</small></label>
+        <div class="gps-row">
+          <input type="text" id="gps" name="gps" placeholder="Latitude, Longitude" readonly>
+          <button type="button" class="btn-secondary btn-sm" onclick="obterGPS()"><i class="fas fa-map-marker-alt"></i> Obter</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- CLASSIFICAÇÃO -->
+    <fieldset>
+      <legend><i class="fas fa-star"></i> Classificação</legend>
+      <div class="radio-group">
+        <label class="radio-card">
+          <input type="radio" name="classificacao" value="Servo" onchange="toggleEscalao(this)">
+          <span><i class="fas fa-praying-hands"></i> Servo</span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="classificacao" value="Irmão" checked onchange="toggleEscalao(this)">
+          <span><i class="fas fa-hand-holding-heart"></i> Irmão</span>
+        </label>
+      </div>
+      <div class="field escalao-field" id="escalaoField" style="display:none;">
+        <label for="escalao">Escalão</label>
+        <select id="escalao" name="escalao">
+          <option value="">Seleccione</option>
+          <option>Subdiácono</option>
+          <option>Sacerdote</option>
+          <option>Ancião</option>
+          <option>Superintendente</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <!-- DISPONIBILIDADE -->
+    <fieldset>
+      <legend><i class="fas fa-bed"></i> Disponibilidade</legend>
+      <div class="grid-3">
+        <div class="field">
+          <label for="capacidade">Quantos hóspedes pode receber? *</label>
+          <input type="number" id="capacidade" name="capacidade" min="1" value="1" required>
+        </div>
+        <div class="field">
+          <label for="quartos">Quartos disponíveis</label>
+          <input type="number" id="quartos" name="quartos" min="0" value="0">
+        </div>
+        <div class="field">
+          <label for="camas">Camas disponíveis</label>
+          <input type="number" id="camas" name="camas" min="0" value="0">
+        </div>
+      </div>
+      <label class="section-label">Pode receber:</label>
+      <div class="checkbox-grid">
+        <label class="check-card"><input type="checkbox" name="recebe_homens"><span><i class="fas fa-male"></i> Homens</span></label>
+        <label class="check-card"><input type="checkbox" name="recebe_mulheres"><span><i class="fas fa-female"></i> Mulheres</span></label>
+        <label class="check-card"><input type="checkbox" name="recebe_familias"><span><i class="fas fa-house-user"></i> Famílias</span></label>
+        <label class="check-card"><input type="checkbox" name="recebe_casais"><span><i class="fas fa-heart"></i> Casais</span></label>
+        <label class="check-card"><input type="checkbox" name="recebe_criancas"><span><i class="fas fa-child"></i> Crianças</span></label>
+        <label class="check-card"><input type="checkbox" name="recebe_idosos"><span><i class="fas fa-user-shield"></i> Idosos</span></label>
+      </div>
+    </fieldset>
+
+    <!-- INFRA-ESTRUTURA -->
+    <fieldset>
+      <legend><i class="fas fa-building"></i> Infra-estrutura</legend>
+      <div class="checkbox-grid">
+        <label class="check-card"><input type="checkbox" name="tem_energia"><span><i class="fas fa-bolt"></i> Energia</span></label>
+        <label class="check-card"><input type="checkbox" name="tem_agua"><span><i class="fas fa-tint"></i> Água</span></label>
+        <label class="check-card"><input type="checkbox" name="tem_internet"><span><i class="fas fa-wifi"></i> Internet</span></label>
+        <label class="check-card"><input type="checkbox" name="tem_wc_privado"><span><i class="fas fa-bath"></i> WC privado</span></label>
+        <label class="check-card"><input type="checkbox" name="tem_wc_partilhado"><span><i class="fas fa-restroom"></i> WC partilhado</span></label>
+        <label class="check-card"><input type="checkbox" name="tem_ac"><span><i class="fas fa-snowflake"></i> Ar condicionado</span></label>
+        <label class="check-card"><input type="checkbox" name="tem_ventoinha"><span><i class="fas fa-fan"></i> Ventoinha</span></label>
+        <label class="check-card"><input type="checkbox" name="tem_acessibilidade"><span><i class="fas fa-wheelchair"></i> Acessibilidade</span></label>
+      </div>
+    </fieldset>
+
+    <!-- TRANSPORTE -->
+    <fieldset>
+      <legend><i class="fas fa-car"></i> Transporte</legend>
+      <div class="checkbox-grid" style="margin-bottom:1rem;">
+        <label class="check-card"><input type="checkbox" name="tem_viatura" id="temViatura" onchange="toggleViatura()"><span><i class="fas fa-car-side"></i> Possui viatura</span></label>
+        <label class="check-card"><input type="checkbox" name="transporta_hospedes" id="transportaHospedes" disabled><span><i class="fas fa-shuttle-van"></i> Transporta hóspedes</span></label>
+      </div>
+      <div class="grid-2 viatura-fields" id="viaturaFields" style="display:none;">
+        <div class="field">
+          <label for="tipo_viatura">Tipo de viatura</label>
+          <input type="text" id="tipo_viatura" name="tipo_viatura" placeholder="Ex.: Sedan, SUV, Pick-up">
+        </div>
+        <div class="field">
+          <label for="lugares_viatura">Número de lugares</label>
+          <input type="number" id="lugares_viatura" name="lugares_viatura" min="0" value="0">
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- OBSERVAÇÕES -->
+    <fieldset>
+      <legend><i class="fas fa-comment-dots"></i> Observações</legend>
+      <div class="field">
+        <textarea id="observacoes" name="observacoes" rows="3" placeholder="Informações adicionais..."></textarea>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn-primary btn-lg"><i class="fas fa-paper-plane"></i> Submeter Registo</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleEscalao(el){
+  document.getElementById('escalaoField').style.display = el.value==='Servo'?'block':'none';
+}
+function toggleViatura(){
+  const on=document.getElementById('temViatura').checked;
+  document.getElementById('viaturaFields').style.display=on?'grid':'none';
+  document.getElementById('transportaHospedes').disabled=!on;
+}
+function obterGPS(){
+  if(!navigator.geolocation){alert('GPS não suportado.');return;}
+  navigator.geolocation.getCurrentPosition(p=>{
+    document.getElementById('gps').value=p.coords.latitude.toFixed(6)+', '+p.coords.longitude.toFixed(6);
+  },()=>alert('Não foi possível obter a localização.'));
+}
+</script>
+{% endblock %}

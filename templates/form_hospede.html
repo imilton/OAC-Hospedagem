@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Registar Hóspedes{% endblock %}
+{% block body_class %}page-form{% endblock %}
+
+{% block layout %}
+<div class="form-page">
+  <header class="form-header">
+    <a href="{{ url_for('public.index') }}" class="back-link"><i class="fas fa-arrow-left"></i> Voltar</a>
+    <div class="logo-badge sm">
+      <span class="logo-the">The</span>
+      <span class="logo-oac">OAC</span>
+    </div>
+    <h1><i class="fas fa-users"></i> Registo de Hóspedes</h1>
+    <p>Informe os dados dos participantes que necessitam de alojamento.</p>
+  </header>
+
+  <form method="POST" class="oac-form" id="formHospede">
+
+    <!-- DADOS PESSOAIS -->
+    <fieldset>
+      <legend><i class="fas fa-user"></i> Dados Pessoais</legend>
+      <div class="grid-2">
+        <div class="field">
+          <label for="nome">Nome completo *</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="field">
+          <label for="sexo">Sexo *</label>
+          <select id="sexo" name="sexo" required>
+            <option value="">Seleccione</option>
+            <option>Masculino</option>
+            <option>Feminino</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="field">
+          <label for="telefone">Telefone *</label>
+          <input type="tel" id="telefone" name="telefone" required>
+        </div>
+        <div class="field">
+          <label for="comunidade_origem">Comunidade de origem *</label>
+          <input type="text" id="comunidade_origem" name="comunidade_origem" required>
+        </div>
+        <div class="field">
+          <label for="cidade">Cidade</label>
+          <input type="text" id="cidade" name="cidade">
+        </div>
+      </div>
+      <div class="field">
+        <label for="provincia">Província</label>
+        <input type="text" id="provincia" name="provincia">
+      </div>
+    </fieldset>
+
+    <!-- CLASSIFICAÇÃO -->
+    <fieldset>
+      <legend><i class="fas fa-star"></i> Classificação</legend>
+      <div class="radio-group">
+        <label class="radio-card">
+          <input type="radio" name="classificacao" value="Servo" onchange="toggleEscalao(this)">
+          <span><i class="fas fa-praying-hands"></i> Servo</span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="classificacao" value="Irmão" checked onchange="toggleEscalao(this)">
+          <span><i class="fas fa-hand-holding-heart"></i> Irmão</span>
+        </label>
+      </div>
+      <div class="field escalao-field" id="escalaoField" style="display:none;">
+        <label for="escalao">Escalão</label>
+        <select id="escalao" name="escalao">
+          <option value="">Seleccione</option>
+          <option>Subdiácono</option>
+          <option>Sacerdote</option>
+          <option>Ancião</option>
+          <option>Superintendente</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <!-- GRUPO -->
+    <fieldset>
+      <legend><i class="fas fa-people-arrows"></i> Grupo</legend>
+      <div class="radio-group">
+        <label class="radio-card"><input type="radio" name="tipo_grupo" value="Sozinho" checked onchange="toggleGrupo()"><span><i class="fas fa-user"></i> Sozinho</span></label>
+        <label class="radio-card"><input type="radio" name="tipo_grupo" value="Casal" onchange="toggleGrupo()"><span><i class="fas fa-heart"></i> Casal</span></label>
+        <label class="radio-card"><input type="radio" name="tipo_grupo" value="Família" onchange="toggleGrupo()"><span><i class="fas fa-house-user"></i> Família</span></label>
+        <label class="radio-card"><input type="radio" name="tipo_grupo" value="Grupo" onchange="toggleGrupo()"><span><i class="fas fa-users"></i> Grupo</span></label>
+      </div>
+      <div id="grupoDetalhes" style="display:none;">
+        <div class="grid-2" style="margin-top:1rem;">
+          <div class="field">
+            <label for="total_pessoas">Total de pessoas *</label>
+            <input type="number" id="total_pessoas" name="total_pessoas" min="1" value="1">
+          </div>
+        </div>
+        <div class="grid-4">
+          <div class="field"><label>Homens</label><input type="number" name="n_homens" min="0" value="0"></div>
+          <div class="field"><label>Mulheres</label><input type="number" name="n_mulheres" min="0" value="0"></div>
+          <div class="field"><label>Crianças</label><input type="number" name="n_criancas" min="0" value="0"></div>
+          <div class="field"><label>Idosos</label><input type="number" name="n_idosos" min="0" value="0"></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- TRANSPORTE -->
+    <fieldset>
+      <legend><i class="fas fa-shuttle-van"></i> Transporte</legend>
+      <div class="checkbox-grid">
+        <label class="check-card"><input type="checkbox" name="necessita_transporte"><span><i class="fas fa-shuttle-van"></i> Necessita transporte</span></label>
+      </div>
+    </fieldset>
+
+    <!-- OBSERVAÇÕES -->
+    <fieldset>
+      <legend><i class="fas fa-comment-dots"></i> Observações</legend>
+      <div class="field">
+        <textarea id="observacoes" name="observacoes" rows="3" placeholder="Informações adicionais..."></textarea>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn-primary btn-lg"><i class="fas fa-paper-plane"></i> Submeter Registo</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleEscalao(el){
+  document.getElementById('escalaoField').style.display=el.value==='Servo'?'block':'none';
+}
+function toggleGrupo(){
+  const v=document.querySelector('input[name="tipo_grupo"]:checked').value;
+  document.getElementById('grupoDetalhes').style.display=(v==='Família'||v==='Grupo')?'block':'none';
+}
+</script>
+{% endblock %}

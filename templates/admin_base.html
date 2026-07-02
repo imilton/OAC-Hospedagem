@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block body_class %}page-admin{% endblock %}
+
+{% block layout %}
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo-badge sm">
+      <span class="logo-the">The</span>
+      <span class="logo-oac">OAC</span>
+    </div>
+    <span class="brand-text">Hospedagem</span>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="{{ url_for('admin.dashboard') }}" class="nav-item active">
+      <i class="fas fa-chart-line"></i><span>Dashboard</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="{{ url_for('public.index') }}" class="nav-item"><i class="fas fa-home"></i><span>Página Inicial</span></a>
+  </div>
+</aside>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<div class="admin-main">
+  <header class="admin-topbar">
+    <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    <h2 class="topbar-title">{% block page_title %}{% endblock %}</h2>
+  </header>
+  <div class="admin-content">
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+<script>
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar'), bd=document.getElementById('sidebarBackdrop');
+  sb.classList.toggle('open');
+  bd.style.display=sb.classList.contains('open')?'block':'none';
+}
+document.getElementById('sidebarBackdrop').addEventListener('click',()=>{
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarBackdrop').style.display='none';
+});
+</script>
+{% endblock %}

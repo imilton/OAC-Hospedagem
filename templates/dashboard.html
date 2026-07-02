@@ -1,0 +1,48 @@
+{% extends "admin_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="kpi-grid">
+  <div class="kpi-card"><div class="kpi-icon" style="background:var(--primary);"><i class="fas fa-home"></i></div><div class="kpi-body"><span class="kpi-value">{{ kpis.total_familias }}</span><span class="kpi-label">Anfitriões</span></div></div>
+  <div class="kpi-card"><div class="kpi-icon" style="background:var(--gold);"><i class="fas fa-users"></i></div><div class="kpi-body"><span class="kpi-value">{{ kpis.total_hospedes }}</span><span class="kpi-label">Registos Hóspedes</span></div></div>
+  <div class="kpi-card"><div class="kpi-icon" style="background:var(--green);"><i class="fas fa-user-friends"></i></div><div class="kpi-body"><span class="kpi-value">{{ kpis.total_pessoas }}</span><span class="kpi-label">Total Pessoas</span></div></div>
+  <div class="kpi-card"><div class="kpi-icon" style="background:var(--orange);"><i class="fas fa-bed"></i></div><div class="kpi-body"><span class="kpi-value">{{ kpis.total_vagas }}</span><span class="kpi-label">Vagas Disponíveis</span></div></div>
+  <div class="kpi-card"><div class="kpi-icon" style="background:var(--secondary);"><i class="fas fa-praying-hands"></i></div><div class="kpi-body"><span class="kpi-value">{{ kpis.total_servos }}</span><span class="kpi-label">Servos</span></div></div>
+  <div class="kpi-card"><div class="kpi-icon" style="background:var(--gold);"><i class="fas fa-hand-holding-heart"></i></div><div class="kpi-body"><span class="kpi-value">{{ kpis.total_irmaos }}</span><span class="kpi-label">Irmãos</span></div></div>
+  <div class="kpi-card"><div class="kpi-icon" style="background:#0284C7;"><i class="fas fa-car"></i></div><div class="kpi-body"><span class="kpi-value">{{ kpis.total_viaturas }}</span><span class="kpi-label">Viaturas</span></div></div>
+</div>
+
+<div class="tables-grid">
+  <div class="table-card">
+    <h3><i class="fas fa-home"></i> Anfitriões</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Nome</th><th>Comunidade</th><th>Bairro</th><th>Classif.</th><th>Vagas</th><th>Viatura</th></tr></thead>
+        <tbody>
+        {% for f in ultimos_anfitrioes %}
+          <tr><td>{{ f.nome }}</td><td>{{ f.comunidade }}</td><td>{{ f.bairro }}</td><td>{{ f.classificacao }}{% if f.escalao %} · {{ f.escalao }}{% endif %}</td><td>{{ f.capacidade }}</td><td>{% if f.tem_viatura %}Sim{% else %}—{% endif %}</td></tr>
+        {% else %}
+          <tr><td colspan="6" class="empty">Sem registos</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="table-card">
+    <h3><i class="fas fa-users"></i> Hóspedes</h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Nome</th><th>Comunidade</th><th>Grupo</th><th>Pessoas</th><th>Classif.</th></tr></thead>
+        <tbody>
+        {% for h in ultimos_hospedes %}
+          <tr><td>{{ h.nome }}</td><td>{{ h.comunidade_origem }}</td><td>{{ h.tipo_grupo }}</td><td>{{ h.total_pessoas }}</td><td>{{ h.classificacao }}{% if h.escalao %} · {{ h.escalao }}{% endif %}</td></tr>
+        {% else %}
+          <tr><td colspan="5" class="empty">Sem registos</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
